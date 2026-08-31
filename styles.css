@@ -378,3 +378,6 @@ html{
 .booking-form .is-invalid{
   border-color: #ffb4a2 !important;
 }
+
+/* TARGETED FIX: "Open in Google Maps" link was invisible (opacity:0) because .pill-btn had transition:all (.35s) which conflicts with GSAP reveal animation (opacity/transform). GSAP sets inline opacity:0/y:70 then animates to opacity:1/y:0, but CSS transition on all properties interferes with the staggered GSAP tween, leaving the last child (visit pill) at opacity:0. Restrict transition to hover properties only so GSAP can control opacity/transform. Preserves reveal animation and hover styling. */
+.visit-copy .pill-btn{transition:background .35s,border-color .35s,color .35s}
