@@ -376,7 +376,10 @@ window.addEventListener('load', () => {
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden', 'true');
     }
-    document.body.classList.remove('menu-open');
+    // preserve scroll lock if mobile menu still open
+    if (!mobile || mobile.getAttribute('aria-hidden') === 'true') {
+      document.body.classList.remove('menu-open');
+    }
   }
 
   DOM.menuCards.forEach((card, i) => {
@@ -835,28 +838,54 @@ window.addEventListener('load', () => {
 
   // Mobile navigation — cached, no repeated queries
   const mobile = DOM.mobileMenu;
+  const menuBtnEl = DOM.menuBtn;
+  // TARGETED FIX: CSS translateY(-100%) is read by GSAP as y:-844 not yPercent.
+  // Animating only yPercent left y offset -> menu stayed hidden while body locked.
+  // Sync GSAP state: y:0 + yPercent:-100 gives correct hidden position without doubling.
+  if (mobile) gsap.set(mobile, { y: 0, yPercent: -100 });
+  const isMobileOpen = () => mobile && mobile.getAttribute('aria-hidden') === 'false';
   const openMobile = () => {
+    if (!mobile) return;
+    if (isMobileOpen()) return;
+    gsap.killTweensOf(mobile);
     document.body.classList.add('menu-open');
-    if (mobile) {
-      mobile.setAttribute('aria-hidden', 'false');
-      gsap.set(mobile, { visibility: 'visible' });
-      gsap.to(mobile, { yPercent: 0, duration: 0.8, ease: 'power4.inOut' });
-      gsap.from('.mobile-links a', { y: 70, opacity: 0, stagger: 0.08, duration: 0.6, ease: 'power3.out', delay: 0.25 });
-    }
+    mobile.setAttribute('aria-hidden', 'false');
+    if (menuBtnEl) menuBtnEl.setAttribute('aria-expanded', 'true');
+    gsap.set(mobile, { visibility: 'visible' });
+    gsap.to(mobile, { y: 0, yPercent: 0, duration: 0.8, ease: 'power4.inOut', overwrite: 'auto' });
+    gsap.fromTo('.mobile-links a', { y: 70, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.08, duration: 0.6, ease: 'power3.out', delay: 0.25, overwrite: 'auto' });
   };
   const closeMobile = () => {
     if (!mobile) return;
+    if (!isMobileOpen()) {
+      gsap.killTweensOf(mobile);
+      gsap.set(mobile, { y: 0, yPercent: -100, visibility: 'hidden' });
+      // preserve scroll lock if modal still open
+      if (!modal || !modal.classList.contains('open')) document.body.classList.remove('menu-open');
+      mobile.setAttribute('aria-hidden', 'true');
+      if (menuBtnEl) menuBtnEl.setAttribute('aria-expanded', 'false');
+      return;
+    }
+    gsap.killTweensOf(mobile);
     gsap.to(mobile, {
+      y: 0,
       yPercent: -100,
       duration: 0.7,
       ease: 'power4.inOut',
+      overwrite: 'auto',
       onComplete: () => {
-        document.body.classList.remove('menu-open');
+        gsap.set(mobile, { visibility: 'hidden' });
+        if (!modal || !modal.classList.contains('open')) document.body.classList.remove('menu-open');
         mobile.setAttribute('aria-hidden', 'true');
+        if (menuBtnEl) menuBtnEl.setAttribute('aria-expanded', 'false');
       },
     });
   };
-  if (DOM.menuBtn) DOM.menuBtn.addEventListener('click', openMobile, { passive: true });
+  const toggleMobile = () => {
+    if (isMobileOpen()) closeMobile();
+    else openMobile();
+  };
+  if (menuBtnEl) menuBtnEl.addEventListener('click', toggleMobile, { passive: true });
   if (DOM.mobileClose) DOM.mobileClose.addEventListener('click', closeMobile, { passive: true });
   DOM.mobileLinks.forEach((a) => a.addEventListener('click', closeMobile, { passive: true }));
 
