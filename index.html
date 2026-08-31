@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#702831" />
+  <meta name="description" content="AXIS Restaurant & Cafe — food, coffee and good energy." />
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/logo-icon.png">
+<link rel="apple-touch-icon" href="assets/logo-icon.png">
+  <title>AXIS — Restaurant & Cafe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preload" as="image" href="assets/logo-transparent.png" fetchpriority="high">
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="loader">
+    <div class="loader-inner">
+      <div class="loader-mark"><img src="assets/logo-transparent.png" alt="AXIS" width="430" height="200" fetchpriority="high" decoding="async" loading="eager"></div>
+      <div class="loader-meta"><span>RESTAURANT</span><span>&</span><span>CAFE</span></div>
+      <div class="loader-line"><span></span></div>
+      <p>ENTERING AXIS</p>
+    </div>
+  </div>
+
+  <header class="nav">
+    <a class="brand magnetic" href="#top" aria-label="AXIS home"><img src="assets/logo-transparent.png" alt="AXIS" width="112" height="52" fetchpriority="high" decoding="async" loading="eager"></a>
+    <nav class="desktop-nav">
+      <a href="#story">Story</a><a href="#gallery">Gallery</a><a href="#menu">Menu</a><a href="#reservation">Reservation</a><a href="#visit">Visit</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-cta magnetic" href="#reservation">Book a table <span>↗</span></a>
+      <button class="menu-btn" aria-label="Open menu"><i></i><i></i></button>
+    </div>
+  </header>
+
+  <div class="mobile-menu" aria-hidden="true">
+    <div class="mobile-menu-top"><img src="assets/logo-transparent.png" alt="AXIS" width="110" height="52" loading="lazy" decoding="async"><button class="mobile-close">CLOSE ×</button></div>
+    <div class="mobile-links"><a href="#story">01 / Story</a><a href="#gallery">02 / Gallery</a><a href="#menu">03 / Menu</a><a href="#reservation">04 / Reserve</a><a href="#visit">05 / Visit</a></div>
+    <div class="mobile-menu-foot">CAIRO · RESTAURANT & CAFE</div>
+  </div>
+
+  <main id="top">
+    <section class="hero hero-clean">
+      <div class="hero-video-stage" aria-hidden="true">
+        <video class="hero-video-main" src="assets/axis-hero.mp4" autoplay muted loop playsinline preload="metadata" poster="assets/logo-card.jpg"></video>
+        <div class="hero-video-shade"></div>
+      </div>
+      <div class="hero-clean-content">
+        <h1 class="hero-slogan">
+          <span>Good food.</span>
+          <span class="accent">Good energy.</span>
+          <span>Good times.</span>
+        </h1>
+        <div class="hero-ctas">
+          <a class="hero-cta hero-cta-primary magnetic" href="#menu">View the menu <span>↗</span></a>
+          <a class="hero-cta magnetic" href="#reservation">Book a table <span>↗</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="marquee"><div class="marquee-track"><span>FOOD · COFFEE · MUSIC · PEOPLE · AXIS · </span><span>FOOD · COFFEE · MUSIC · PEOPLE · AXIS · </span><span>FOOD · COFFEE · MUSIC · PEOPLE · AXIS · </span></div></section>
+
+    <section id="story" class="story section">
+      <div class="section-tag">01 / THE PLACE</div>
+      <div class="story-grid">
+        <div class="story-title"><p class="eyebrow">MORE THAN A MEAL</p><h2>Find your<br><em>axis.</em></h2></div>
+        <div class="story-copy"><p class="lead">AXIS is built around a simple idea: great food feels better when the atmosphere is just as memorable.</p><p>From slow mornings and specialty coffee to long lunches and late-night plates, every detail is made to feel warm, playful and a little unexpected.</p><a class="text-link magnetic" href="#gallery">See the atmosphere <span>↗</span></a></div>
+      </div>
+      <div class="story-image reveal-img"><img src="assets/coffee.jpg" alt="AXIS coffee selection" width="850" height="620" loading="lazy" decoding="async"><span>01 — COFFEE MOMENTS</span><div class="image-number">01</div></div>
+    </section>
+
+    <section class="feature dark-section">
+      <div class="feature-photo reveal-photo"><img src="assets/signature-burgers.jpg" alt="AXIS signature burgers" width="800" height="900" loading="lazy" decoding="async"><div class="photo-label">SIGNATURE PLATES</div><div class="photo-arrow">↗</div></div>
+      <div class="feature-copy"><div class="section-tag">02 / FROM THE KITCHEN</div><p class="eyebrow">MADE TO BE SHARED</p><h2>Big flavor.<br><em>No rules.</em></h2><p>Comfort food with a little edge. Burgers, pasta, breakfast plates, coffee and everything in between — made for the table, the camera and the craving.</p><a class="pill-btn magnetic" href="#menu">Open menu <span>↗</span></a></div>
+    </section>
+
+    <section id="gallery" class="gallery section">
+      <div class="gallery-head"><div><div class="section-tag">03 / THE AXIS MOOD</div><h2>A table worth<br><em>staying for.</em></h2></div><p>Sunny afternoons. Golden plates. Coffee that keeps the conversation going.</p></div>
+      <div class="gallery-grid">
+        <figure class="g g1"><img src="assets/breakfast.jpg" alt="AXIS breakfast" width="600" height="520" loading="lazy" decoding="async"><figcaption>BREAKFAST / ALL DAY</figcaption></figure>
+        <figure class="g g2"><img src="assets/pasta.jpg" alt="AXIS pasta" width="600" height="680" loading="lazy" decoding="async"><figcaption>PASTA / SIGNATURE</figcaption></figure>
+        <figure class="g g3"><img src="assets/avocado.jpg" alt="AXIS fresh plate" width="600" height="460" loading="lazy" decoding="async"><figcaption>FRESH / DAILY</figcaption></figure>
+      </div>
+    </section>
+
+    <section id="menu" class="menu-section dark-section">
+      <div class="menu-intro"><div class="section-tag">04 / THE MENU</div><h2>Take a<br><em>look.</em></h2><p>The real AXIS menu, presented as a moving visual experience.</p></div>
+      <div class="menu-progress"><span></span></div>
+      <div class="menu-rail">
+        <button class="menu-card active"><img src="assets/menu/salads-soup.png" alt="Salads and soup menu" width="430" height="610" loading="lazy" decoding="async" fetchpriority="low"><span>01 · SALADS / SOUP</span></button>
+        <button class="menu-card"><img src="assets/menu/beef-chicken.png" alt="Beef and chicken menu" width="430" height="610" loading="lazy" decoding="async" fetchpriority="low"><span>02 · BEEF / CHICKEN</span></button>
+        <button class="menu-card"><img src="assets/menu/seafood-kids-appetizer.png" alt="Seafood kids appetizer menu" width="430" height="610" loading="lazy" decoding="async"><span>03 · SEAFOOD / KIDS</span></button>
+        <button class="menu-card"><img src="assets/menu/sandwich-desserts.png" alt="Sandwich and desserts menu" width="430" height="610" loading="lazy" decoding="async"><span>04 · SANDWICH / DESSERTS</span></button>
+        <button class="menu-card"><img src="assets/menu/breakfast-sourdough.png" alt="Breakfast and sourdough menu" width="430" height="610" loading="lazy" decoding="async"><span>05 · BREAKFAST</span></button>
+        <button class="menu-card"><img src="assets/menu/pizza-pasta.png" alt="Pizza and pasta menu" width="430" height="610" loading="lazy" decoding="async"><span>06 · PIZZA / PASTA</span></button>
+        <button class="menu-card"><img src="assets/menu/specially-drinks.png" alt="Specially and ice drinks menu" width="430" height="610" loading="lazy" decoding="async"><span>07 · DRINKS</span></button>
+        <button class="menu-card"><img src="assets/menu/hot-chocolates.png" alt="Hot chocolates tea herbs matcha menu" width="430" height="610" loading="lazy" decoding="async"><span>08 · HOT / TEA / MATCHA</span></button>
+        <button class="menu-card"><img src="assets/menu/hot.png" alt="Hot coffee menu" width="430" height="610" loading="lazy" decoding="async"><span>09 · HOT COFFEE</span></button>
+      </div>
+      <div class="menu-hint"><span>SCROLL DOWN TO EXPLORE</span><i>↓</i><span>CLICK TO EXPAND</span></div>
+    </section>
+
+    <section id="reservation" class="reservation section">
+      <div class="reservation-copy">
+        <div class="section-tag">05 / RESERVATIONS</div>
+        <p class="eyebrow">MAKE IT A NIGHT</p>
+        <h2>Your table<br><em>is waiting.</em></h2>
+        <p class="reservation-lead">Pick a time, bring your people, and let AXIS handle the rest.</p>
+        <div class="reservation-note"><span>01</span><p>Reservations are requests and will be confirmed by the AXIS team.</p></div>
+      </div>
+      <form class="booking-form" id="bookingForm" novalidate>
+        <div class="form-top"><span>BOOK A TABLE</span><span>AXIS / CAIRO</span></div>
+        <label>RESERVATION TYPE
+          <select name="reservationType" id="reservationType" required>
+            <option value="">Select reservation type</option>
+            <option value="regular">Regular Table Reservation</option>
+            <option value="birthday_no_decoration">Birthday — No Decoration</option>
+            <option value="birthday_with_decoration">Birthday — With Decoration</option>
+            <option value="corporate">Corporate Event</option>
+          </select>
+        </label>
+        <span class="field-error" id="error-reservationType" aria-live="polite"></span>
+        <label>NAME<input name="name" type="text" placeholder="Your name" required></label>
+        <span class="field-error" id="error-name" aria-live="polite"></span>
+        <div class="form-row"><label>DATE<input name="date" id="bookingDate" type="date" lang="en-GB" required disabled placeholder="Select a reservation type first"></label><label>TIME<input name="time" id="bookingTime" type="time" lang="en-GB" required></label></div>
+        <span class="field-error" id="error-date" aria-live="polite"></span>
+        <span class="field-error" id="error-time" aria-live="polite"></span>
+        <div class="form-row"><label>GUESTS<select name="guests" id="bookingGuests" required><option value="">Select</option><option>2 guests</option><option>3 guests</option><option>4 guests</option><option>5 guests</option><option>6+ guests</option></select></label><label>PHONE<input name="phone" type="tel" placeholder="01xxxxxxxxx" required></label></div>
+        <span class="field-error" id="error-guests" aria-live="polite"></span>
+        <span class="field-error" id="error-phone" aria-live="polite"></span>
+        <label>NOTE<textarea name="note" rows="3" placeholder="Birthday, window seat, special request..." ></textarea></label>
+        <button class="form-submit magnetic" type="submit"><span>Request reservation</span><b>↗</b></button>
+        <p class="form-status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section id="visit" class="visit section dark-section">
+      <div class="visit-image reveal-photo"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3456.690446065351!2d31.4501999!3d29.95958139999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145825003f2e492f%3A0xa9d86028834c3ae6!2sAxis%20restaurant%20and%20cafe!5e0!3m2!1sen!2seg!4v1788175706578!5m2!1sen!2seg" title="AXIS Restaurant & Cafe location on Google Maps" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="visit-copy"><div class="section-tag">06 / COME THROUGH</div><p class="eyebrow">YOUR TABLE IS WAITING</p><h2>See you<br><em>at AXIS.</em></h2><div class="visit-details"><div><small>LOCATION</small><p>Restaurant & Cafe<br>ELMALAHY, Ain El Sokhna Rd, Cairo Governorate
+
+</p></div><div><small>HOURS</small><p>Daily<br>9 AM - 2 AM</p></div></div><a class="pill-btn magnetic" href="https://maps.app.goo.gl/mPU1pwiWe39pLEHk9" target="_blank" rel="noopener noreferrer">Open In Google Maps <span>↗</span></a></div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-main">
+      <div class="footer-brand"><img src="assets/logo-transparent.png" alt="AXIS" width="175" height="80" loading="lazy" decoding="async"><p>RESTAURANT & CAFE</p></div>
+      <div class="footer-col"><span>EXPLORE</span><a href="#story">Story</a><a href="#gallery">Gallery</a><a href="#menu">Menu</a><a href="#reservation">Reservation</a><a href="#visit">Visit</a></div>
+      <div class="footer-col"><span>FIND US</span><p>ELMALAHY, Ain El Sokhna Rd, Cairo Governorate
+</p><a href="https://wa.me/201063333165" target="_blank">+20 10 63333165
+</a><a href="mailto:hello@axis-cafe.com">hello@axis-cafe.com</a></div>
+      <div class="footer-col"><span>FOLLOW</span><a href="https://www.instagram.com/p/DWGpN4Dgf4d/" target="_blank">Instagram ↗</a><a href="https://web.facebook.com/AxisRestaurant" target="_blank">Facebook ↗</a> 
+      <a href="https://wa.me/201063333165"  target="_blank">WhatsApp ↗</a>
+      </div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 AXIS RESTAURANT & CAFE</span><span>MADE FOR GOOD TIMES</span><a href="#top">BACK TO TOP ↑</a></div>
+  </footer>
+
+  <div class="menu-modal" aria-hidden="true"><button class="modal-close">CLOSE ×</button><div class="modal-image-wrap"><img src="" alt="Full AXIS menu" decoding="async"></div><div class="modal-nav"><button class="prev" aria-label="Previous menu">←</button><span>01 / 09</span><button class="next" aria-label="Next menu">→</button></div></div>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+  <script src="script.js" defer></script>
+
+<!-- <a class="wa-float" href="https://wa.me/201063333165?text=Hi%20AXIS%2C%20I%27d%20like%20to%20book%20a%20table." target="_blank" rel="noopener" aria-label="WhatsApp AXIS">◉</a> -->
+</body>
+</html>

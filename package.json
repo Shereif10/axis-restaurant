@@ -1,0 +1,16 @@
+{
+  "name": "axis-restaurant-main",
+  "version": "1.0.0",
+  "description": "A high-impact, animated one-page restaurant site built with semantic HTML, CSS and GSAP/ScrollTrigger.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}
