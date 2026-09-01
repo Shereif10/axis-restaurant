@@ -273,11 +273,14 @@ window.addEventListener('load', () => {
 
     // Touch: map horizontal swipe to same vertical scroll progress
     let tStartX = 0, tStartY = 0, tLastX = 0, tLastY = 0, tActive = false;
+    let tSamples = []; // recent touchmove samples for release velocity
     const onTouchStart = (e) => {
+      stopFling();
       if (!isMenuPinned()) return;
       if (!e.touches || e.touches.length !== 1) return;
       tStartX = tLastX = e.touches[0].clientX;
       tStartY = tLastY = e.touches[0].clientY;
+      tSamples = [];
       tActive = true;
     };
     const onTouchMove = (e) => {
@@ -294,6 +297,8 @@ window.addEventListener('load', () => {
       if (absX < 0.5 && absY < 0.5) return;
       const horizontalDominant = absX > absY;
       if (!horizontalDominant) return; // let native vertical scroll handle vertical swipes
+      tSamples.push({ t: e.timeStamp, x: curX });
+      if (tSamples.length > 8) tSamples.shift();
       const st = getMenuST();
       if (!st) return;
       const p = st.progress;
@@ -303,13 +308,62 @@ window.addEventListener('load', () => {
       e.preventDefault();
       window.scrollBy(0, dX);
     };
-    const onTouchEnd = () => { tActive = false; };
+    const touchReleaseVelocity = () => {
+      const s = tSamples;
+      const n = s.length;
+      if (n < 2) return 0;
+      const last = s[n - 1];
+      let i = 0;
+      while (i < n - 1 && last.t - s[i].t > 120) i++;
+      const span = last.t - s[i].t;
+      if (span < 8) return 0;
+      return (s[i].x - last.x) / span * 1000; // px/s, + = forward (finger moved left)
+    };
+    // Native vertical touch scrolling glides after release (momentum). The horizontal
+    // path preventDefaults the native gesture, so it must apply the same decaying
+    // glide itself — otherwise horizontal swipes feel slower than vertical ones.
+    let flingRAF = 0, flingV = 0, flingT = 0;
+    const FLING_FRICTION = 0.95; // velocity retained per 16.7ms frame (~325ms time constant)
+    const FLING_MIN_START = 220; // px/s — below this a release is a plain stop, not a flick
+    const FLING_MIN_KEEP = 25;   // px/s — glide ends when nearly stopped
+    const stopFling = () => { if (flingRAF) { cancelAnimationFrame(flingRAF); flingRAF = 0; } };
+    const startFling = (v0) => {
+      stopFling();
+      if (Math.abs(v0) < FLING_MIN_START) return;
+      const st0 = getMenuST();
+      const p0 = st0 ? st0.progress : 0;
+      if ((p0 <= 0.001 && v0 < 0) || (p0 >= 0.999 && v0 > 0)) return;
+      flingV = v0;
+      flingT = performance.now();
+      const step = (t) => {
+        flingRAF = 0;
+        const dt = Math.min(64, t - flingT);
+        flingT = t;
+        if (!isMenuPinned() || (DOM.menuModal && DOM.menuModal.classList.contains('open'))) return;
+        const st = getMenuST();
+        if (!st) return;
+        const p = st.progress;
+        if ((p <= 0.001 && flingV < 0) || (p >= 0.999 && flingV > 0)) return;
+        const dtSec = dt / 1000;
+        window.scrollBy(0, flingV * dtSec);
+        flingV *= Math.pow(FLING_FRICTION, dt / 16.667);
+        if (Math.abs(flingV) < FLING_MIN_KEEP) return;
+        flingRAF = requestAnimationFrame(step);
+      };
+      flingRAF = requestAnimationFrame(step);
+    };
+    const onTouchEnd = () => {
+      if (!tActive) return;
+      tActive = false;
+      const v = touchReleaseVelocity();
+      if (v) startFling(v);
+    };
 
     // touch listeners must be non-passive to allow preventDefault for horizontal
     menuSection.addEventListener('touchstart', onTouchStart, { passive: true });
     menuSection.addEventListener('touchmove', onTouchMove, { passive: false });
     menuSection.addEventListener('touchend', onTouchEnd, { passive: true });
-    menuSection.addEventListener('touchcancel', onTouchEnd, { passive: true });
+    menuSection.addEventListener('touchcancel', () => { stopFling(); tActive = false; }, { passive: true });
 
     // Debounced resize handling (150ms): rebuild the horizontal trigger only when
     // the viewport WIDTH actually changed. Height-only changes (mobile URL bar

@@ -139,13 +139,18 @@ button,a{touch-action:manipulation;}
   .modal-image-wrap{width:min(94vw,700px);height:auto;max-width:94vw;max-height:78svh;overflow:hidden;box-shadow:0 12px 50px rgba(0,0,0,.35);}
   .modal-image-wrap img{display:block;width:100%;height:auto;max-width:100%;max-height:78svh;object-fit:contain;}
   .modal-close{right:18px;top:18px;}
-  .modal-nav{top:50%;bottom:auto;transform:translateY(-50%);gap:22px;}
+  .modal-nav{left:0;right:0;bottom:16px;justify-content:center;}
+  .modal-nav .prev{position:fixed;top:50%;transform:translateY(-50%);right:min(calc(50% + min(47vw,350px) + 10px),calc(100% - 43px));}
+  .modal-nav .next{position:fixed;top:50%;transform:translateY(-50%);left:min(calc(50% + min(47vw,350px) + 10px),calc(100% - 43px));}
 }
 
 /* Phones in landscape: viewport wider than 800px but very short + touch-only.
-   Same centered modal-nav alignment as the mobile block above; desktop never matches (hover + fine pointer). */
+   Same flanking arrows as the mobile block above; desktop never matches (hover + fine pointer).
+   Landscape wrap uses desktop rules (height:90vh, aspect 1280:1656) -> half-width = min(44vw,34.78vh). */
 @media (max-height: 500px) and (hover: none) and (pointer: coarse){
-  .modal-nav{top:50%;bottom:auto;transform:translateY(-50%);}
+  .modal-nav{left:0;right:0;bottom:4px;justify-content:center;}
+  .modal-nav .prev{position:fixed;top:50%;transform:translateY(-50%);right:min(calc(50% + min(44vw,34.78vh) + 10px),calc(100% - 43px));}
+  .modal-nav .next{position:fixed;top:50%;transform:translateY(-50%);left:min(calc(50% + min(44vw,34.78vh) + 10px),calc(100% - 43px));}
 }
 
 @media (max-width: 420px){
