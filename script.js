@@ -257,8 +257,7 @@ window.addEventListener('load', () => {
       // Only intercept horizontal-dominant input; let pure vertical use native scroll
       if (!horizontalDominant) return;
       let delta = normalizeDelta(e, e.deltaX);
-      // Normalize sensitivity — cap to avoid wild jumps from different devices
-      delta = Math.max(-120, Math.min(120, delta));
+      // No cap: match native vertical wheel speed exactly (full delta -> same px of page scroll)
       if (Math.abs(delta) < 1) return;
       const st = getMenuST();
       if (!st) return;
@@ -403,6 +402,33 @@ window.addEventListener('load', () => {
   }
   if (DOM.prevBtn) DOM.prevBtn.addEventListener('click', () => openMenu((current - 1 + menuImgs.length) % menuImgs.length), { passive: true });
   if (DOM.nextBtn) DOM.nextBtn.addEventListener('click', () => openMenu((current + 1) % menuImgs.length), { passive: true });
+
+  // Touch swipe navigation inside the OPEN Menu image modal only (mobile):
+  // swipe LEFT -> next image, swipe RIGHT -> previous image.
+  // Minimum distance + horizontal dominance so taps and vertical gestures are ignored.
+  let swX = 0, swY = 0, swId = null, swActive = false;
+  const SWIPE_MIN_PX = 50;
+  if (modal) {
+    modal.addEventListener('touchstart', (e) => {
+      if (!modal.classList.contains('open') || !e.touches || e.touches.length !== 1) return;
+      swX = e.touches[0].clientX;
+      swY = e.touches[0].clientY;
+      swId = e.touches[0].identifier;
+      swActive = true;
+    }, { passive: true });
+    modal.addEventListener('touchend', (e) => {
+      if (!swActive) return;
+      swActive = false;
+      const t = e.changedTouches && Array.prototype.find.call(e.changedTouches, (c) => c.identifier === swId);
+      if (!t) return;
+      const dx = t.clientX - swX;
+      const dy = t.clientY - swY;
+      if (Math.abs(dx) < SWIPE_MIN_PX || Math.abs(dx) <= Math.abs(dy)) return;
+      if (dx < 0) openMenu((current + 1) % menuImgs.length);
+      else openMenu((current - 1 + menuImgs.length) % menuImgs.length);
+    }, { passive: true });
+    modal.addEventListener('touchcancel', () => { swActive = false; }, { passive: true });
+  }
 
   // Reservation form — AXIS booking validation (preserves visual design)
   const form = DOM.form;

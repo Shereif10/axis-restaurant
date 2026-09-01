@@ -139,7 +139,13 @@ button,a{touch-action:manipulation;}
   .modal-image-wrap{width:min(94vw,700px);height:auto;max-width:94vw;max-height:78svh;overflow:hidden;box-shadow:0 12px 50px rgba(0,0,0,.35);}
   .modal-image-wrap img{display:block;width:100%;height:auto;max-width:100%;max-height:78svh;object-fit:contain;}
   .modal-close{right:18px;top:18px;}
-  .modal-nav{bottom:16px;gap:22px;}
+  .modal-nav{top:50%;bottom:auto;transform:translateY(-50%);gap:22px;}
+}
+
+/* Phones in landscape: viewport wider than 800px but very short + touch-only.
+   Same centered modal-nav alignment as the mobile block above; desktop never matches (hover + fine pointer). */
+@media (max-height: 500px) and (hover: none) and (pointer: coarse){
+  .modal-nav{top:50%;bottom:auto;transform:translateY(-50%);}
 }
 
 @media (max-width: 420px){
