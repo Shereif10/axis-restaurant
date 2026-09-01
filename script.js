@@ -1,5 +1,8 @@
 /* AXIS — performance-optimized script (vanilla + GSAP) */
 gsap.registerPlugin(ScrollTrigger);
+/* Ignore height-only viewport changes on mobile (URL bar show/hide) so scrolling
+   does not trigger costly ScrollTrigger refreshes. Width changes still refresh. */
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 /* ---------- helpers ---------- */
 const $ = (s, ctx = document) => ctx.querySelector(s);
@@ -93,7 +96,9 @@ window.addEventListener('load', () => {
     .to('.loader-meta,.loader p', { opacity: 0, y: 8, duration: 0.35 }, '-=.25')
     .to(DOM.loader, { yPercent: -100, duration: 1.15, ease: 'power4.inOut' })
     .from(DOM.nav, { y: -30, opacity: 0, duration: 0.6 }, '-=.55')
-    .from(DOM.heroContent, { opacity: 0, y: 18, duration: 0.7 }, '-=.35');
+    .from(DOM.heroContent, { opacity: 0, y: 18, duration: 0.7 }, '-=.35')
+    // Loader is fully off-screen by now — drop its fixed layer from compositing
+    .add(() => { if (DOM.loader) DOM.loader.style.display = 'none'; });
 
   // Hero parallax — use cached els, transform/opacity only (performant)
   if (DOM.heroVideo && DOM.heroSection) {
@@ -162,6 +167,7 @@ window.addEventListener('load', () => {
     });
   });
 
+  const galleryGrid = $('.gallery-grid');
   DOM.galleryItems.forEach((el, i) => {
     gsap.from(el, {
       y: 110,
@@ -170,7 +176,7 @@ window.addEventListener('load', () => {
       duration: 1.1,
       delay: i * 0.08,
       ease: 'power3.out',
-      scrollTrigger: { trigger: $('.gallery-grid'), start: 'top 78%' },
+      scrollTrigger: { trigger: galleryGrid, start: 'top 78%' },
     });
   });
 
@@ -306,14 +312,18 @@ window.addEventListener('load', () => {
     menuSection.addEventListener('touchend', onTouchEnd, { passive: true });
     menuSection.addEventListener('touchcancel', onTouchEnd, { passive: true });
 
-    // Debounced refresh (150ms) to avoid rapid calls during resize
-    const debouncedRefresh = debounce(() => {
-      ScrollTrigger.refresh();
-    }, 150);
-
+    // Debounced resize handling (150ms): rebuild the horizontal trigger only when
+    // the viewport WIDTH actually changed. Height-only changes (mobile URL bar
+    // show/hide) are skipped — ScrollTrigger handles them internally (and ignores
+    // them on mobile via ignoreMobileResize) — so scrolling on phones never
+    // triggers expensive rebuild/refresh cycles.
+    let lastWidth = window.innerWidth;
     const onResize = debounce(() => {
+      const w = window.innerWidth;
+      if (w === lastWidth) return;
+      lastWidth = w;
       setupHorizontalMenu();
-      debouncedRefresh();
+      ScrollTrigger.refresh();
     }, 150);
 
     window.addEventListener('resize', onResize, { passive: true });
@@ -785,29 +795,29 @@ window.addEventListener('load', () => {
     });
   })();
 
-  // Magnetic buttons — cache rect, use rAF throttle, passive listeners
-  DOM.magneticEls.forEach((el) => {
-    let rect = null;
+  // Magnetic buttons — cache rect, use rAF throttle, passive listeners.
+  // One shared debounced scroll/resize listener invalidates cached rects
+  // (re-read lazily on the next pointer interaction) instead of 2 listeners
+  // per element — same visual effect, far less work while scrolling.
+  const magStates = DOM.magneticEls.map((el) => ({ el, rect: el.getBoundingClientRect() }));
+  const invalidateMagRects = debounce(() => {
+    magStates.forEach((s) => { s.rect = null; });
+  }, 200);
+  window.addEventListener('resize', invalidateMagRects, { passive: true });
+  window.addEventListener('scroll', invalidateMagRects, { passive: true });
+
+  magStates.forEach((state) => {
+    const el = state.el;
     let rafId = null;
     let lastX = 0;
     let lastY = 0;
 
-    const updateRect = () => {
-      rect = el.getBoundingClientRect();
-    };
-    updateRect();
-
-    // Update rect on resize/scroll (debounced)
-    const onWindowChange = debounce(updateRect, 200);
-    window.addEventListener('resize', onWindowChange, { passive: true });
-    window.addEventListener('scroll', onWindowChange, { passive: true });
-
     const apply = () => {
       rafId = null;
-      if (!rect) return;
+      if (!state.rect) return;
       gsap.to(el, {
-        x: (lastX - rect.left - rect.width / 2) * 0.14,
-        y: (lastY - rect.top - rect.height / 2) * 0.14,
+        x: (lastX - state.rect.left - state.rect.width / 2) * 0.14,
+        y: (lastY - state.rect.top - state.rect.height / 2) * 0.14,
         duration: 0.25,
         ease: 'power2.out',
         overwrite: true,
@@ -819,7 +829,7 @@ window.addEventListener('load', () => {
       (e) => {
         lastX = e.clientX;
         lastY = e.clientY;
-        if (!rect) updateRect();
+        if (!state.rect) state.rect = el.getBoundingClientRect();
         if (rafId === null) rafId = requestAnimationFrame(apply);
       },
       { passive: true }
@@ -833,7 +843,13 @@ window.addEventListener('load', () => {
       },
       { passive: true }
     );
-    el.addEventListener('pointerenter', updateRect, { passive: true });
+    el.addEventListener(
+      'pointerenter',
+      () => {
+        state.rect = el.getBoundingClientRect();
+      },
+      { passive: true }
+    );
   });
 
   // Mobile navigation — cached, no repeated queries
